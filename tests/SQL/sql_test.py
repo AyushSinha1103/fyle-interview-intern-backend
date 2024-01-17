@@ -1,9 +1,7 @@
 import random
 from sqlalchemy import text
-
 from core import db
 from core.models.assignments import Assignment, AssignmentStateEnum, GradeEnum
-
 
 def create_n_graded_assignments_for_teacher(number: int = 0, teacher_id: int = 1) -> int:
     """
@@ -50,9 +48,9 @@ def create_n_graded_assignments_for_teacher(number: int = 0, teacher_id: int = 1
     return grade_a_counter
 
 
+
 def test_get_assignments_in_various_states():
     """Test to get assignments in various states"""
-
     # Define the expected result before any changes
     expected_result = [('DRAFT', 2), ('GRADED', 2), ('SUBMITTED', 2)]
 
@@ -61,6 +59,7 @@ def test_get_assignments_in_various_states():
         sql = fo.read()
 
     sql_result = db.session.execute(text(sql)).fetchall()
+    
     for itr, result in enumerate(expected_result):
         assert result[0] == sql_result[itr][0]
         assert result[1] == sql_result[itr][1]
@@ -72,6 +71,7 @@ def test_get_assignments_in_various_states():
     submitted_assignment: Assignment = Assignment.filter(Assignment.state == AssignmentStateEnum.SUBMITTED).first()
     submitted_assignment.state = AssignmentStateEnum.GRADED
     submitted_assignment.grade = GradeEnum.C
+
 
     # Flush the changes to the database session
     db.session.flush()
